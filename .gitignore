@@ -1,0 +1,15 @@
+# KiCad autosave, recovery, and local editor state
+.history/
+*autosave*
+*AutoSave*
+#auto_saved_files#
+*.lck
+*-rescue.kicad_sch
+*-rescue.kicad_pcb
+*-rescue.kicad_pro
+*-backups/
+fp-info-cache
+*.kicad_prl
+
+# macOS metadata
+.DS_Store
