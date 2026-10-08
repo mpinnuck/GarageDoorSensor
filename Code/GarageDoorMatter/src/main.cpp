@@ -48,6 +48,9 @@ void setup() {
   pinMode(DOOR_PIN, INPUT);            // external 10k pull-up fitted
   pinMode(BUTTON_PIN, INPUT_PULLUP);
 
+  Matter.setProductName("Garage Door");   // must be set before Matter.begin()
+  Matter.setDeviceName("Garage Door");
+
   GarageDoor.begin();                  // endpoint first...
   Matter.begin();                      // ...then the Matter stack
 
@@ -70,6 +73,14 @@ void setup() {
 }
 
 void loop() {
+  // --- Log Wi-Fi connect/disconnect ---
+  static int lastWifi = -1;
+  int wifiNow = Matter.isWiFiConnected() ? 1 : 0;
+  if (wifiNow != lastWifi) {
+    lastWifi = wifiNow;
+    Serial.println(wifiNow ? "Wi-Fi CONNECTED" : "Wi-Fi not connected");
+  }
+
   // --- Door input with debounce ---
   static bool lastRaw = readDoorClosed();
   static uint32_t lastChange = millis();
