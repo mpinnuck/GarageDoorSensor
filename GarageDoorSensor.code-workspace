@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "GarageDoorMatter (Code)",
+			"path": "Code/GarageDoorMatter"
+		},
+		{
+			"name": "Circuit",
+			"path": "Circuit"
+		},
+		{
+			"name": "Housing",
+			"path": "Housing"
+		},
+		{
+			"name": "GarageDoorSensor (root)",
+			"path": "."
+		}
+	],
+	"settings": {}
+}
