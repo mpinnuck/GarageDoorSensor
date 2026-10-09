@@ -12,16 +12,34 @@ folder is included as a separate workspace folder so PlatformIO can find its
 You can also open this folder directly when working only on the firmware.
 Uses the pioarduino platform (Arduino ESP32 core 3.x, which has the Matter library).
 
-Run PlatformIO CLI commands from this folder. Erase only on the first flash, or
-to force a re-pair, because it wipes the Apple Home pairing:
+Run PlatformIO CLI commands from this folder:
 
 ```sh
-pio run -t erase     # first flash only (or to force a re-pair)
+pio run -t erase
 pio run -t upload
 pio device monitor
 ```
 
 If the board is not detected, hold BOOT while plugging in USB.
+
+## Web UI
+Once the sensor is on Wi-Fi, open `http://<device IP>/` in any browser on your
+home network. It shows the door state, Wi-Fi signal, uptime, boot count, last
+reset reason and a live event log (updated every 2 s, last 100 lines kept on
+the device, Download button saves what the page has collected).
+
+Find the IP in the Deco app's client list, and reserve it there so it
+never changes. The page is read-only and has no login, so it is only
+reachable from your home network.
+
+Source files:
+- `EventLog`       ring buffer of log lines, also mirrored to Serial
+- `StatusWebServer` port 80 server: `/`, `/api/status`, `/api/log?since=N`, `POST /api/reset-boot-count`
+- `StatusPage.h`   the HTML/JS page
+- `ClockSync`      NTP time (Sydney time zone) for log timestamps
+- `NetworkStatus`  IP, SSID and signal from the Wi-Fi interface Matter owns
+- `BootInfo`       persistent boot counter and last reset reason
+- `DeviceStatus`   door state shared with the web server
 
 ## Pairing
 Serial monitor prints a manual pairing code and a QR code link.
