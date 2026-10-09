@@ -12,10 +12,11 @@ folder is included as a separate workspace folder so PlatformIO can find its
 You can also open this folder directly when working only on the firmware.
 Uses the pioarduino platform (Arduino ESP32 core 3.x, which has the Matter library).
 
-Run PlatformIO CLI commands from this folder:
+Run PlatformIO CLI commands from this folder. Erase only on the first flash, or
+to force a re-pair, because it wipes the Apple Home pairing:
 
 ```sh
-pio run -t erase
+pio run -t erase     # first flash only (or to force a re-pair)
 pio run -t upload
 pio device monitor
 ```

@@ -11,11 +11,9 @@
 // Commissioning: over Bluetooth (CHIPoBLE). The Apple/Google app sends the
 // Wi-Fi credentials, so none are stored in this sketch.
 //
-// Arduino IDE settings:
-//   Board:              XIAO_ESP32C3
-//   Partition Scheme:   Huge APP (3MB No OTA/1MB SPIFFS)
-//   Erase All Flash Before Sketch Upload: Enabled for the FIRST upload only,
-//                       then Disabled (otherwise every upload wipes the pairing).
+// Build settings (board, partition table, USB serial) are in platformio.ini.
+// Erase flash only on the first upload, or to force a re-pair: an erase wipes
+// the pairing.
 
 #include <Arduino.h>
 #include <Matter.h>
@@ -73,6 +71,7 @@ void setup() {
 }
 
 void loop() {
+  matterRestartIfNoFabric();           // reboot if the hub removed this device
   // --- Log Wi-Fi connect/disconnect ---
   static int lastWifi = -1;
   int wifiNow = Matter.isWiFiConnected() ? 1 : 0;

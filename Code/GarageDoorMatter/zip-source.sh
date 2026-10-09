@@ -11,6 +11,7 @@ rm -f "$OUT"
 zip -r "$OUT" . \
   -x ".git/*" \
   -x "*/.pio/*" ".pio/*" \
+  -x "*/.vscode/*" ".vscode/*" \
   -x "*/.DS_Store" ".DS_Store" \
   -x "*.zip"
 
