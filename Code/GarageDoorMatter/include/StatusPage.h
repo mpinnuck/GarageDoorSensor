@@ -48,7 +48,16 @@ padding:8px 10px;font:12.5px/1.55 ui-monospace,Menlo,monospace;white-space:pre-w
 <div id="log"></div>
 </main><script>
 const $=id=>document.getElementById(id);
-let lastSeq=0,paused=false,lines=[];
+let lastSeq=0,paused=false,lines=[],online=null,busy=false;
+function tmo(url,opt){const c=new AbortController(),t=setTimeout(()=>c.abort(),4000);
+ return fetch(url,{...opt,cache:'no-store',signal:c.signal}).finally(()=>clearTimeout(t))}
+function addLine(text){const ts=new Date().toLocaleString([], {day:'2-digit',month:'short',hour:'2-digit',minute:'2-digit',second:'2-digit'});
+ lines.push(`${ts}  ${text}`);const el=$('log'),atEnd=el.scrollTop+el.clientHeight>=el.scrollHeight-20;
+ const d=document.createElement('div');d.innerHTML=`<span class="t">${ts}</span>  ${esc(text)}`;el.appendChild(d);
+ if(atEnd)el.scrollTop=el.scrollHeight}
+function setOnline(ok){if(ok===online)return;
+ if(online!==null)addLine(ok?'Connection restored':'Connection lost: device not responding');
+ online=ok;$('conn').textContent=ok?'live':'not responding';$('conn').className=ok?'on':'off'}
 function dur(s){s=Math.floor(s);const d=Math.floor(s/86400),h=Math.floor(s%86400/3600),
 m=Math.floor(s%3600/60);return d?`${d}d ${h}h ${m}m`:h?`${h}h ${m}m`:m?`${m}m ${s%60}s`:`${s}s`}
 function stamp(epoch,now,t){if(epoch>0){const d=new Date((epoch-(now-t)/1000)*1000);
@@ -57,7 +66,7 @@ return '+'+dur(t/1000)}
 function cell(k,v,c){return `<div class="cell${c?' '+c:''}"><div class="k">${k}</div><div class="v">${v}</div></div>`}
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]))}
 async function status(){
- const r=await fetch('/api/status',{cache:'no-store'});const s=await r.json();
+ const r=await tmo('/api/status');const s=await r.json();
  const b=$('door');b.textContent=s.doorClosed?'Closed':'Open';b.className='badge '+(s.doorClosed?'closed':'open');
  $('since').textContent=s.lastChangeAgoS>=0?`for ${dur(s.lastChangeAgoS)}`:'no change since boot';
  $('changes').textContent=`${s.doorChanges} change${s.doorChanges==1?'':'s'} since boot`;
@@ -68,16 +77,17 @@ async function status(){
  +cell('Last reset',esc(s.resetReason))+cell('Free memory',`${(s.freeHeap/1024).toFixed(0)} KB (min ${(s.minFreeHeap/1024).toFixed(0)} KB)`)
  +cell('Firmware',esc(s.firmware),'wide');}
 async function log(){
- const r=await fetch('/api/log?since='+lastSeq,{cache:'no-store'});const j=await r.json();
+ const r=await tmo('/api/log?since='+lastSeq);const j=await r.json();
  if(j.latest<lastSeq){lastSeq=0;lines=[];$('log').innerHTML='';return}
  const el=$('log'),atEnd=el.scrollTop+el.clientHeight>=el.scrollHeight-20;
  for(const e of j.entries){const ts=stamp(j.epoch,j.now,e.t);lines.push(`${ts}  ${e.m}`);
   const d=document.createElement('div');d.innerHTML=`<span class="t">${ts}</span>  ${esc(e.m)}`;el.appendChild(d);lastSeq=e.s}
  while(el.childNodes.length>500)el.removeChild(el.firstChild);
  if(atEnd)el.scrollTop=el.scrollHeight;}
-async function tick(){if(paused)return;
- try{await status();await log();$('conn').textContent='live';$('conn').className='on'}
- catch(e){$('conn').textContent='not responding';$('conn').className='off'}}
+async function tick(){if(paused||busy)return;busy=true;
+ try{await status();await log();setOnline(true)}
+ catch(e){setOnline(false)}
+ finally{busy=false}}
 $('rst').onclick=async()=>{if(!confirm('Reset the boot count to 0?'))return;
  try{await fetch('/api/reset-boot-count',{method:'POST'});await status()}catch(e){}};
 $('pause').onclick=()=>{paused=!paused;$('pause').textContent=paused?'Resume':'Pause'};
