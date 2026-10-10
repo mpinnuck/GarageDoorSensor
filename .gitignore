@@ -4,6 +4,7 @@
 *AutoSave*
 #auto_saved_files#
 *.lck
+*.FCBak
 *-rescue.kicad_sch
 *-rescue.kicad_pcb
 *-rescue.kicad_pro
