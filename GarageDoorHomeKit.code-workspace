@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "GarageDoorHomeKit (Code)",
+			"path": "Code/GarageDoorHomeKit"
+		},
+		{
+			"name": "Circuit",
+			"path": "Circuit"
+		},
+		{
+			"name": "Housing",
+			"path": "Housing"
+		},
+		{
+			"name": "GarageDoorSensor (root)",
+			"path": "."
+		}
+	],
+	"settings": {}
+}
