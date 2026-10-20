@@ -106,6 +106,7 @@ void setup() {
 
   Log.begin();
   bootInfo.begin();
+  deviceStatus.homekitSetupCode = HOMEKIT_SETUP_CODE;
   Log.log("Boot #%lu, last reset: %s, firmware %s", (unsigned long)bootInfo.bootCount(),
           bootInfo.resetReason(), FIRMWARE_VERSION);
 

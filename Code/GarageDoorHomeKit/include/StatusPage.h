@@ -74,7 +74,8 @@ async function status(){
  $('grid').innerHTML=cell('Uptime',dur(s.uptimeMs/1000))+cell('Time',s.epoch?new Date(s.epoch*1000).toLocaleString():'not synced')
  +cell('Wi-Fi',s.wifi?esc(s.ssid||'connected'):'disconnected')+cell('Signal',rssi)+cell('IP address',s.ip||'-')
  +cell('HomeKit',s.commissioned?'Paired':'Not paired')+cell('Boot count',s.bootCount)
- +cell('Last reset',esc(s.resetReason))+cell('Free memory',`${(s.freeHeap/1024).toFixed(0)} KB (min ${(s.minFreeHeap/1024).toFixed(0)} KB)`)
+ +cell('Last reset',esc(s.resetReason))+cell('HomeKit setup code',esc(s.homekitSetupCode))
+ +cell('Free memory',`${(s.freeHeap/1024).toFixed(0)} KB (min ${(s.minFreeHeap/1024).toFixed(0)} KB)`)
  +cell('Firmware',esc(s.firmware),'wide');}
 async function log(){
  const r=await tmo('/api/log?since='+lastSeq);const j=await r.json();

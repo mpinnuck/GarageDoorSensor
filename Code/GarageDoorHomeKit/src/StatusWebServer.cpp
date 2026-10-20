@@ -65,6 +65,8 @@ void StatusWebServer::handleStatus() {
   json += _boot.bootCount();
   json += ",\"resetReason\":";
   appendJsonString(json, _boot.resetReason());
+  json += ",\"homekitSetupCode\":";
+  appendJsonString(json, _status.homekitSetupCode);
   json += ",\"freeHeap\":";
   json += ESP.getFreeHeap();
   json += ",\"minFreeHeap\":";

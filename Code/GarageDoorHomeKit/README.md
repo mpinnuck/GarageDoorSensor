@@ -46,7 +46,8 @@ Hold BOOT for 5 s: forgets the HomeKit pairing and restarts, ready to add again.
 
 ## Web UI
 Door state, Wi-Fi signal, uptime, boot count (with Reset), last reset reason,
-HomeKit pairing and a live event log. Read-only apart from the boot-count reset.
+HomeKit pairing and setup code, and a live event log. Read-only apart from the
+boot-count reset.
 
 Source files:
 - `main.cpp`          HomeSpan setup, door input, BOOT reset
