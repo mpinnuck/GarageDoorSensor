@@ -17,6 +17,7 @@
 
 #include <Arduino.h>
 #include <HomeSpan.h>
+#include <WiFi.h>
 
 #include "BootInfo.h"
 #include "ClockSync.h"
@@ -60,6 +61,9 @@ static void onConnected(int count) {
 }
 
 static void setupHomeKit() {
+  WiFi.mode(WIFI_STA);
+  if (!WiFi.setHostname("garagedoor")) Log.log("Could not set Wi-Fi hostname");
+
   homeSpan.setLogLevel(0)
       .setPortNum(HOMEKIT_PORT)
       .setWifiCredentials(WIFI_SSID, WIFI_PASSWORD)

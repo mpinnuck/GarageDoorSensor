@@ -5,7 +5,9 @@ Apple HomeKit contact sensor firmware for the garage door sensor, using
 (kept unchanged). Seeed XIAO ESP32C3, door reed on D1 (GPIO3), reed closed = door shut.
 
 - Apple Home shows **Garage Door** as Open / Closed; Siri: "Is the garage door open?"
-- Same web page as before at `http://garagedoor.local/` (or the reserved IP)
+- Same web page as before at `http://garagedoor.local/` (or the reserved IP);
+  the device advertises the Wi-Fi hostname `garagedoor` (the router may show it
+  with its own local DNS suffix, such as `.lan`)
 - **Firmware updates over Wi-Fi** once installed
 
 HomeKit only: Google Home can no longer see the sensor.
